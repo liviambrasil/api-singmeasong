@@ -9,4 +9,9 @@ async function findGenreByName (name:string) {
     return getGenres.rows
 }
 
-export {insertNewGenre, findGenreByName}
+async function getGenresInOrder() {
+    const getGenres = await connection.query('SELECT * FROM genres ORDER BY name ASC') 
+    return getGenres.rows
+}
+
+export {insertNewGenre, findGenreByName, getGenresInOrder}

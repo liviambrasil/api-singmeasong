@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import { findGenreByName, insertNewGenre } from '../repositories/genreRepository'
+import { findGenreByName, getGenresInOrder, insertNewGenre } from '../repositories/genreRepository'
 import { genreSchema } from '../schemas/genresSchema'
 
 async function addGenre (req: Request, res:Response) {
@@ -21,4 +21,16 @@ async function addGenre (req: Request, res:Response) {
     }
 }
 
-export {addGenre}
+async function getGenres(req:Request, res: Response) {
+    try {
+        const genres = await getGenresInOrder()
+        if(!genres.length) return res.sendStatus(404)
+        res.send(genres)
+    }
+    catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+export {addGenre, getGenres}
