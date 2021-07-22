@@ -18,7 +18,7 @@ async function findMusicByLink (youtubeLink:string) {
 }
 
 async function findMusicById (songId:number) {
-    const getMusicById = await connection.query("SELECT * FROM songs WHERE link = $1", [songId])
+    const getMusicById = await connection.query("SELECT * FROM songs WHERE id = $1", [songId])
     return getMusicById.rows
 }
 

@@ -7,7 +7,7 @@ const postSongSchema = joi.object({
 })
 
 const paramIdSchema = joi.object({
-    songId: joi.number().integer().positive().required()
+    id: joi.number().integer().positive().required()
 })
 
-export { postSongSchema }
+export { postSongSchema, paramIdSchema }
