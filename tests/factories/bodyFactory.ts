@@ -1,8 +1,14 @@
 import faker from "faker"
 
-export function generateSongBody () {
+function generateSongBody () {
 
     return {name: faker.name.title(),
             youtubeLink: faker.internet.url(),
             genresIds: [1]}
 }
+
+function generateGenreBody () {
+    return {name: faker.music.genre()}
+}
+
+export {generateSongBody, generateGenreBody}

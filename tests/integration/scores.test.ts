@@ -23,24 +23,20 @@ describe("POST /recommendations/:id/upvote" ,() => {
         const response = await agent.post("/recommendations/1/upvote");
         expect(response.status).toEqual(201);
     })
-
     it('returns 400 if the song is not registered', async() => {
         const response = await agent.post("/recommendations/1/upvote");
         expect(response.status).toEqual(400);
     })
-
     it('returns 400 if the song is not registered', async() => {
         await createSong()
         const response = await agent.post("/recommendations/5/upvote");
         expect(response.status).toEqual(400);
     })
-
     it('returns 400 for invalid (not a number) param', async() => {
         await createSong()
         const response = await agent.post("/recommendations/wrongparam/upvote");
         expect(response.status).toEqual(400);
     })
-
     it('verifies if a point has been added to the score', async() => {
         await createSong()
         await agent.post("/recommendations/1/upvote");
@@ -62,26 +58,22 @@ describe("POST /recommendations/:id/downvote" ,() => {
         const response = await agent.post("/recommendations/1/downvote");
         expect(response.status).toEqual(400);
     })
-
     it('returns 400 if the song is not registered', async() => {
         await createSong()
         const response = await agent.post("/recommendations/5/downvote");
         expect(response.status).toEqual(400);
     })
-
     it('returns 400 for invalid (not a number) param', async() => {
         await createSong()
         const response = await agent.post("/recommendations/wrongparam/downvote");
         expect(response.status).toEqual(400);
     })
-
     it('verifies if a point has been delete to the score', async() => {
         await createSong()
         await agent.post("/recommendations/1/downvote");
         const finalScore = await connection.query('SELECT * FROM songs WHERE id = $1', [1])
         expect(finalScore.rows[0].score).toEqual(-1);
     })
-
     it('verifies if a song has been delete if the score is lower than -5', async() => {
         await createSong()
 

@@ -108,7 +108,6 @@ describe("GET /recommendations/random", () => {
     const response = await agent.get("/recommendations/random");
     expect(Object.keys(response.body).length).toEqual(4)
   })
-
   it('returns one song recommended with right format infos', async () => {
     const response = await agent.get("/recommendations/random");
     expect(response.body)
@@ -129,12 +128,10 @@ describe("GET /recommendations/top/:amount", () => {
     const response = await agent.get("/recommendations/top/1");
     expect(response.status).toEqual(200);
   })
-
   it('returns the amount of songs designated on the url param', async() => {
     const response = await agent.get("/recommendations/top/3");
     expect(response.body.length).toEqual(3);
   })
-
   it('returns the songs in decrescent order by score', async() => {
     await vote();
 
@@ -142,12 +139,10 @@ describe("GET /recommendations/top/:amount", () => {
     const songs = response.body
     expect(songs[0].score > songs[1].score && songs[1].score > songs[2].score).toEqual(true)
   })
-
   it('returns a array of songs in object format', async () => {
     const response = await agent.get("/recommendations/top/3");
     expect(response.body).toEqual(expect.any(Array))
   })
-
   it('returns songs with right format infos', async () => {
     const response = await agent.get("/recommendations/top/3");
     expect(response.body[0])
