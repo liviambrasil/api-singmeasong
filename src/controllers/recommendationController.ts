@@ -28,7 +28,7 @@ async function getRandomSong (req:Request, res:Response) {
     try{
         const recommendation = await selectSong(songs)
         if(!recommendation) return res.sendStatus(404)
-
+        console.log(recommendation)
         res.send(recommendation)
     }
     catch (e){
