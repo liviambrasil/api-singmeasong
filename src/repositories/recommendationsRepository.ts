@@ -22,5 +22,10 @@ async function findMusicById (songId:number) {
     return getMusicById.rows
 }
 
+async function getAllSongs() {
+    const getSongs = await connection.query("SELECT * FROM songs")
+    return getSongs.rows
+}
 
-export { insertNewSong, findMusicByLink, findMusicById }
+
+export { insertNewSong, findMusicByLink, findMusicById, getAllSongs }
