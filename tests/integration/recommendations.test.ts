@@ -2,6 +2,7 @@ import supertest from "supertest";
 import app from "../../src/app";
 import connection from "../../src/database";
 import { generateSongBody } from "../factories/bodyFactory";
+import { createGenre } from "../factories/genreFactory";
 import { clearDatabase, endConnection } from "../utils/database";
 
 beforeEach (async() => {
@@ -16,9 +17,7 @@ const agent = supertest(app)
 
 describe("POST /recommendations", () => {
 
-  beforeEach(async() => {
-    await connection.query("INSERT INTO genres (name) VALUES ($1)", ["MPB"])
-  })
+  beforeEach(async() => await createGenre())
 
   it('returns status 201 for valid params', async () => {
     const body = generateSongBody()

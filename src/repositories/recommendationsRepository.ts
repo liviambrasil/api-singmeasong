@@ -22,8 +22,5 @@ async function findMusicById (songId:number) {
     return getMusicById.rows
 }
 
-async function addPoint (songId:number) {
-    await connection.query("UPDATE songs SET score = score + 1")
-}
 
-export { insertNewSong, findMusicByLink, findMusicById, addPoint }
+export { insertNewSong, findMusicByLink, findMusicById }
