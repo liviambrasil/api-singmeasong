@@ -12,9 +12,18 @@ async function insertNewSong (name:string, genresIds:number[], youtubeLink:strin
     })
 }
 
-async function findMusic (youtubeLink:string) {
+async function findMusicByLink (youtubeLink:string) {
     const getMusicByLink = await connection.query("SELECT * FROM songs WHERE link = $1", [youtubeLink])
     return getMusicByLink.rows
 }
 
-export { insertNewSong, findMusic }
+async function findMusicById (songId:number) {
+    const getMusicById = await connection.query("SELECT * FROM songs WHERE link = $1", [songId])
+    return getMusicById.rows
+}
+
+async function addPoint (songId:number) {
+    await connection.query("UPDATE songs SET score = score + 1")
+}
+
+export { insertNewSong, findMusicByLink, findMusicById, addPoint }
