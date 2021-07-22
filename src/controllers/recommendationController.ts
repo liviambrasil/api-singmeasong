@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { findMusicByLink, getAllSongs, insertNewSong } from "../repositories/recommendationsRepository"
+import { findMusicByLink, getAllSongs, getAllSongsDescScore, insertNewSong } from "../repositories/recommendationsRepository"
 import { postSongSchema } from "../schemas/recommendationSchemas"
 import { selectSong } from "../services/recommendationsService"
 
@@ -23,12 +23,10 @@ async function addMusic (req:Request, res:Response) {
 }
 
 async function getRandomSong (req:Request, res:Response) {
-    const songs:Array<{id:number, name:string, link:string, score:number}> = await getAllSongs()
-
     try{
+        const songs:Array<{id:number, name:string, link:string, score:number}> = await getAllSongs()
         const recommendation = await selectSong(songs)
         if(!recommendation) return res.sendStatus(404)
-        console.log(recommendation)
         res.send(recommendation)
     }
     catch (e){
@@ -37,4 +35,17 @@ async function getRandomSong (req:Request, res:Response) {
     }
 }
 
-export { addMusic, getRandomSong }
+async function getTopMusics (req:Request, res:Response) {
+    const amount:number = Number(req.params.amount)
+
+    try{
+        const songs:Array<{id:number, name:string, link:string, score:number}> = await getAllSongsDescScore(amount)
+        res.send(songs)
+    }
+    catch(e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+export { addMusic, getRandomSong, getTopMusics }

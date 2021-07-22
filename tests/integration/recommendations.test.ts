@@ -2,8 +2,9 @@ import supertest from "supertest";
 import app from "../../src/app";
 import { generateSongBody } from "../factories/bodyFactory";
 import { createGenre } from "../factories/genreFactory";
-import { createSong } from "../factories/songFactory";
+import { createSong, populateTableSongs } from "../factories/songFactory";
 import { clearDatabase, endConnection } from "../utils/database";
+import { vote } from "../utils/score";
 
 beforeEach (async() => {
   await clearDatabase()
@@ -97,14 +98,12 @@ describe("GET /recommendations/random", () => {
     const response = await agent.get("/recommendations/random");
     expect(response.status).toEqual(200);
   })
-
   it('returns status 404 when there is no songs on the list', async() => {
     await clearDatabase()
 
     const response = await agent.get("/recommendations/random");
     expect(response.status).toEqual(404);
   })
-
   it('returns one song recommended with 4 infos', async () => {
     const response = await agent.get("/recommendations/random");
     expect(Object.keys(response.body).length).toEqual(4)
@@ -112,11 +111,51 @@ describe("GET /recommendations/random", () => {
 
   it('returns one song recommended with right format infos', async () => {
     const response = await agent.get("/recommendations/random");
-    expect.objectContaining({
-          id: expect.any(Number),
-          name: expect.any(String),
-          link: expect.any(Number),
-          score: expect.any(Number)
-     })
+    expect(response.body)
+    .toEqual(expect.objectContaining(
+      {id: expect.any(Number), 
+      name: expect.any(String),
+      link: expect.any(String),
+      score: expect.any(Number)})
+    )
+  })
+})
+
+describe("GET /recommendations/top/:amount", () => {
+
+  beforeEach(async() => await populateTableSongs())
+
+  it('returns status 200 for valid params', async () => {
+    const response = await agent.get("/recommendations/top/1");
+    expect(response.status).toEqual(200);
+  })
+
+  it('returns the amount of songs designated on the url param', async() => {
+    const response = await agent.get("/recommendations/top/3");
+    expect(response.body.length).toEqual(3);
+  })
+
+  it('returns the songs in decrescent order by score', async() => {
+    await vote();
+
+    const response = await agent.get("/recommendations/top/3")
+    const songs = response.body
+    expect(songs[0].score > songs[1].score && songs[1].score > songs[2].score).toEqual(true)
+  })
+
+  it('returns a array of songs in object format', async () => {
+    const response = await agent.get("/recommendations/top/3");
+    expect(response.body).toEqual(expect.any(Array))
+  })
+
+  it('returns songs with right format infos', async () => {
+    const response = await agent.get("/recommendations/top/3");
+    expect(response.body[0])
+    .toEqual(expect.objectContaining(
+      {id: expect.any(Number), 
+      name: expect.any(String),
+      link: expect.any(String),
+      score: expect.any(Number)})
+    )
   })
 })

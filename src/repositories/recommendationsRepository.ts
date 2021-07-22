@@ -27,5 +27,10 @@ async function getAllSongs() {
     return getSongs.rows
 }
 
+async function getAllSongsDescScore(amount:Number) {
+    const getSongs = await connection.query("SELECT * FROM songs ORDER BY score DESC LIMIT $1", [amount])
+    return getSongs.rows
+}
 
-export { insertNewSong, findMusicByLink, findMusicById, getAllSongs }
+
+export { insertNewSong, findMusicByLink, findMusicById, getAllSongs, getAllSongsDescScore }

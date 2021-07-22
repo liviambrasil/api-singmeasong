@@ -1,5 +1,8 @@
+import faker from "faker"
+
 export function generateSongBody () {
-    return {name: "Vambora",
-            youtubeLink: "https://music.youtube.com/watch?v=W08GxWYBBBw&feature=share",
+
+    return {name: faker.name.title(),
+            youtubeLink: faker.internet.url(),
             genresIds: [1]}
 }
