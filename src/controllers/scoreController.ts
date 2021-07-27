@@ -2,6 +2,7 @@ import { paramIdSchema } from "../schemas/recommendationSchemas"
 import {Response, Request} from 'express'
 import { findMusicById } from "../repositories/recommendationsRepository"
 import { addPoint, deleteSongOrNot, dislike } from "../repositories/scoreRepository"
+import { responseSongType } from "../types/songType"
 
 async function addScore (req:Request, res:Response) {
     const songId:number = Number(req.params.id)
@@ -10,7 +11,7 @@ async function addScore (req:Request, res:Response) {
     if(error) return res.status(400).send({ error: error.details[0].message })
 
     try {
-        const verifyMusic = await findMusicById(songId)
+        const verifyMusic: Array<responseSongType> = await findMusicById(songId)
         if(!verifyMusic.length) return res.sendStatus(400)
         
         await addPoint(songId)
@@ -29,7 +30,7 @@ async function dislikeSong (req:Request, res:Response) {
     if(error) return res.status(400).send({ error: error.details[0].message })
 
     try {
-        const verifyMusic = await findMusicById(songId)
+        const verifyMusic: Array<responseSongType> = await findMusicById(songId)
         if(!verifyMusic.length) return res.sendStatus(400)
         
         await dislike(songId)

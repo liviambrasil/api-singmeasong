@@ -1,4 +1,5 @@
 import connection from "../database"
+import { responseSongType } from "../types/songType"
 import { findMusicById } from "./recommendationsRepository"
 
 async function addPoint (songId:number) {
@@ -10,7 +11,7 @@ async function dislike (songId:number) {
 }
 
 async function deleteSongOrNot (songId:number) {
-    const music:Array<{id:number, name:string, link:string, score:number}> = await findMusicById(songId)
+    const music:Array<responseSongType> = await findMusicById(songId)
 
     if(music[0].score > -5) return false
 
